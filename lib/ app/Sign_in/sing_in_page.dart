@@ -14,6 +14,9 @@ class _SignInPageState extends State<SignInPage> {
   var username;
   var password;
   var user;
+  var _isVisibile = true;
+  var _validate = false;
+
   FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
@@ -51,6 +54,7 @@ class _SignInPageState extends State<SignInPage> {
                 height: 50,
               ),
               TextField(
+                autofocus: false,
                 style: TextStyle(color: Colors.white),
                 cursorColor: Color.fromRGBO(220, 74, 91, 1),
                 decoration: InputDecoration(
@@ -64,10 +68,11 @@ class _SignInPageState extends State<SignInPage> {
                         color: Color.fromRGBO(220, 74, 91, 1),
                       ),
                     ),
-                    labelText: 'UserName',
-                    labelStyle: TextStyle(color: Colors.white)),
+                    hintText: 'UserName',
+                    hintStyle: TextStyle(color: Colors.white)),
                 controller: _usernameController,
                 onChanged: (newValue) {
+                  _validate = false;
                   username = newValue;
                 },
               ),
@@ -75,10 +80,28 @@ class _SignInPageState extends State<SignInPage> {
                 height: 30,
               ),
               TextField(
-                obscureText: true,
+                obscureText: !_isVisibile,
                 style: TextStyle(color: Colors.white),
                 cursorColor: Color.fromRGBO(220, 74, 91, 1),
                 decoration: InputDecoration(
+                    suffixIcon: IconButton(
+                      splashColor: Colors.transparent,
+                      icon: _isVisibile
+                          ? Icon(
+                              Icons.visibility,
+                              color: Colors.white,
+                            )
+                          : Icon(
+                              Icons.visibility_off,
+                              color: Colors.grey,
+                            ),
+                      onPressed: () => {
+                        setState(() {
+                          _validate = false;
+                          _isVisibile = !_isVisibile;
+                        })
+                      },
+                    ),
                     enabledBorder: OutlineInputBorder(
                       borderSide: new BorderSide(
                         color: Color.fromRGBO(220, 74, 91, 1),
@@ -89,25 +112,39 @@ class _SignInPageState extends State<SignInPage> {
                         color: Color.fromRGBO(220, 74, 91, 1),
                       ),
                     ),
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.white)),
+                    hintText: 'Password',
+                    hintStyle: TextStyle(color: Colors.white)),
                 controller: _passwordController,
                 onChanged: (newValue) {
+                  _validate = false;
                   password = newValue;
                 },
               ),
               SizedBox(
+                height: 10,
+              ),
+              AnimatedContainer(
+                  duration: Duration(milliseconds: 500),
+                  child: Text(
+                    "Email or Password not correct",
+                    style: TextStyle(
+                      color: _validate ? Colors.red : Colors.transparent,
+                    ),
+                  )),
+              SizedBox(
                 height: 50,
               ),
-              ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Color.fromRGBO(220, 74, 91, 1),
-                  ),
-                  fixedSize: MaterialStateProperty.all(Size.fromWidth(5000)),
-                  elevation: MaterialStateProperty.all(0),
+              MaterialButton(
+                color: Color.fromRGBO(
+                  220,
+                  74,
+                  91,
+                  1,
                 ),
                 onPressed: () => signIn,
+                minWidth: double.infinity,
+                elevation: 0,
+                splashColor: Colors.transparent,
                 child: Text(
                   'Sign In',
                   style: TextStyle(color: Colors.white),
@@ -124,7 +161,9 @@ class _SignInPageState extends State<SignInPage> {
           email: username, password: password);
       if (user == null) {}
     } catch (e) {
-      print(e);
+      setState(() {
+        _validate = true;
+      });
     }
 
     return user;

@@ -1,7 +1,11 @@
 import 'package:car_expenses/%20app/Sign_in/sing_in_page.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(MyApp());
 }
 
@@ -12,7 +16,12 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.orange,
+        textSelectionTheme: TextSelectionThemeData(
+          selectionColor: Colors.grey,
+        ),
+        cupertinoOverrideTheme: CupertinoThemeData(
+          primaryColor: Colors.grey,
+        ),
       ),
       home: SignInPage(),
     );
