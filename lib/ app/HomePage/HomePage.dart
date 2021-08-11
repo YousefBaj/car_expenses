@@ -1,4 +1,6 @@
+import 'package:car_expenses/%20app/AddNewCar.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -8,6 +10,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  var _date = "01/08/2021";
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +24,12 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           IconButton(
-            onPressed: () => {},
+            onPressed: () => {
+              Navigator.push(
+                  context,
+                  PageTransition(
+                      child: AddNewCar(), type: PageTransitionType.topToBottom))
+            },
             icon: Icon(
               Icons.add,
               size: 26,
@@ -38,13 +46,49 @@ class _HomePageState extends State<HomePage> {
           itemBuilder: (BuildContext context, index) {
             return Column(
               children: [
-                Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Colors.white,
+                GestureDetector(
+                  onTap: () => {},
+                  child: Container(
+                    padding: EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.white,
+                    ),
+                    width: double.infinity,
+                    height: 150,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Car Name",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 22,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                              "Last Update: $_date",
+                              style: TextStyle(
+                                color: Colors.black45,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Image.asset(
+                          "Assets/Images/Splash.png",
+                          width: 150,
+                          height: 100,
+                        ),
+                      ],
+                    ),
                   ),
-                  width: double.infinity,
-                  height: 200,
                 ),
                 SizedBox(
                   height: 30,
