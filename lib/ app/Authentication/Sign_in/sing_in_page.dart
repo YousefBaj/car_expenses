@@ -1,5 +1,9 @@
+import 'package:car_expenses/%20app/Authentication/SignUp/SignUp.dart';
+import 'package:car_expenses/%20app/HomePage/HomePage.dart';
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:page_transition/page_transition.dart';
 
 class SignInPage extends StatefulWidget {
   SignInPage();
@@ -14,7 +18,7 @@ class _SignInPageState extends State<SignInPage> {
   var username;
   var password;
   var user;
-  var _isVisibile = true;
+  var _isVisibile = false;
   var _validate = false;
 
   FirebaseAuth auth = FirebaseAuth.instance;
@@ -59,16 +63,18 @@ class _SignInPageState extends State<SignInPage> {
                 cursorColor: Color.fromRGBO(220, 74, 91, 1),
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: new BorderSide(
                         color: Color.fromRGBO(220, 74, 91, 1),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: new BorderSide(
                         color: Color.fromRGBO(220, 74, 91, 1),
                       ),
                     ),
-                    hintText: 'UserName',
+                    hintText: 'Email',
                     hintStyle: TextStyle(color: Colors.white)),
                 controller: _usernameController,
                 onChanged: (newValue) {
@@ -103,11 +109,13 @@ class _SignInPageState extends State<SignInPage> {
                       },
                     ),
                     enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: new BorderSide(
                         color: Color.fromRGBO(220, 74, 91, 1),
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
                       borderSide: new BorderSide(
                         color: Color.fromRGBO(220, 74, 91, 1),
                       ),
@@ -128,13 +136,16 @@ class _SignInPageState extends State<SignInPage> {
                   child: Text(
                     "Email or Password not correct",
                     style: TextStyle(
-                      color: _validate ? Colors.red : Colors.transparent,
+                      color: _validate ? Colors.redAccent : Colors.transparent,
                     ),
                   )),
               SizedBox(
                 height: 50,
               ),
               MaterialButton(
+                height: 50,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(5)),
                 color: Color.fromRGBO(
                   220,
                   74,
@@ -146,10 +157,54 @@ class _SignInPageState extends State<SignInPage> {
                 elevation: 0,
                 splashColor: Colors.transparent,
                 child: Text(
-                  'Sign In',
-                  style: TextStyle(color: Colors.white),
+                  "SIGN IN",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
+              Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Don't have an account?",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 14,
+                          ),
+                        ),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        GestureDetector(
+                          child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          onTap: () => {
+                            Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: SignUp(),
+                                  type: PageTransitionType.bottomToTop,
+                                  duration: Duration(milliseconds: 400)),
+                            )
+                          },
+                        )
+                      ],
+                    )
+                  ],
+                ),
+              )
             ],
           )),
     );
@@ -159,7 +214,16 @@ class _SignInPageState extends State<SignInPage> {
     try {
       user = await auth.signInWithEmailAndPassword(
           email: username, password: password);
-      if (user == null) {}
+      if (user != null) {
+        Navigator.pushReplacement(
+          context,
+          PageTransition(
+            child: HomePage(),
+            type: PageTransitionType.fade,
+            duration: Duration(milliseconds: 500),
+          ),
+        );
+      }
     } catch (e) {
       setState(() {
         _validate = true;

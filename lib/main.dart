@@ -1,4 +1,4 @@
-import 'package:car_expenses/%20app/Sign_in/sing_in_page.dart';
+import 'package:car_expenses/%20app/SplashScreen/SplashScreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
           primaryColor: Colors.grey,
         ),
       ),
-      home: SignInPage(),
+      home: SplashScreen(),
     );
   }
 }
